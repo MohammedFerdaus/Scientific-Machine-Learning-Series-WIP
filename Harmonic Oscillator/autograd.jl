@@ -15,7 +15,7 @@ end
 mutable struct TrackedValue
     value::Float64
     tape_index::Int
-end
+end 
 
 function new_tape()
     return Tape(TapeEntry[], Float64[])
