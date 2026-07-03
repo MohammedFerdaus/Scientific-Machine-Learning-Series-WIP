@@ -13,7 +13,7 @@ function compute_loss(params, observed_trajectory, times)
     
     return loss, predicted
 end
-
+ 
 function adam_step(params, grad_params, adam_state, learning_rate, step)
     beta1, beta2, epsilon = 0.9, 0.999, 1e-8
     new_params = []
