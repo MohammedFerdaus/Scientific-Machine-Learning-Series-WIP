@@ -5,7 +5,7 @@ include("adjoint.jl")
 include("node_train.jl")
 
 using CairoMakie
-
+ 
 function test_true_dynamics()
     alpha, beta, delta, gamma = 1.5, 1.0, 1.0, 3.0
     initial_state = [1.0, 1.0]
