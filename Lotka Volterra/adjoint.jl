@@ -3,7 +3,7 @@ using LinearAlgebra
 function compute_jacobian(state, params)
     activations = [state]
     pre_activations = []
-
+ 
     for (W, b) in params[1:end-1]
         z_pre = W * activations[end] + b
         push!(pre_activations, z_pre)
