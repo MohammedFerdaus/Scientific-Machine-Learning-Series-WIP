@@ -6,7 +6,7 @@ function rk4_step(state, t, dt, dynamics_fn)
 
     return state + (dt/6) * (k1 + 2*k2 + 2*k3 + k4)
 end
-
+ 
 function rk4_step_log(log_state, t, dt, alpha, beta, delta, gamma)
     k1 = log_dynamics(log_state, alpha, beta, delta, gamma)
     k2 = log_dynamics(log_state + 0.5*dt*k1, alpha, beta, delta, gamma)
