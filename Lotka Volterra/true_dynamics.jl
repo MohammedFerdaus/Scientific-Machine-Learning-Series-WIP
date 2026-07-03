@@ -7,7 +7,7 @@ function lotka_volterra_dynamics(state, alpha, beta, delta, gamma)
 
     return [dx, dy]
 end
-
+ 
 function log_dynamics(log_state, alpha, beta, delta, gamma)
     u, v = log_state
     du = alpha - beta*exp(v)
