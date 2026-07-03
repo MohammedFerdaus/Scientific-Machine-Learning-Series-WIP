@@ -12,7 +12,7 @@ function init_params(layer_sizes, random_seed)
 
         w = -limit .+ (2 * limit) .* rand(rng, n_out, n_in)
         b = zeros(n_out)
-
+ 
         push!(params, (w, b))
     end
 
