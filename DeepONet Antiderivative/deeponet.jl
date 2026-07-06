@@ -14,7 +14,7 @@ function init_deeponet(sensor_dim, query_dim, hidden_dim, p)
 
     return DeepONet(branch, trunk, bias)
 end
-
+ 
 function forward_deeponet(net::DeepONet, sensor_values, y)
     b = forward_branch(net.branch, sensor_values)
     t = forward_trunk(net.trunk, y)
