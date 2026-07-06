@@ -7,4 +7,4 @@ function evaluate_antiderivative(sample::FourierFunctionSample, y)
     end
 
     return result
-end
+end 
