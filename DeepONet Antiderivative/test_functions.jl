@@ -15,7 +15,7 @@ end
 function evaluate_u(f::ConstantFunction, t)
     return f.c .+ zero(t)
 end
-
+ 
 function evaluate_u(f::SinusoidFunction, t)
     return sin.(2 * pi * f.k .* t)
 end
