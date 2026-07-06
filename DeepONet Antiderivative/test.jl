@@ -13,7 +13,7 @@ function evaluate_on_test_function(net::DeepONet, test_function, y_grid)
 
     return predicted, true_values
 end
-
+ 
 function compute_error_metrics(predicted, true_values)
     errors = predicted .- true_values
     max_absolute_error = maximum(abs.(errors))
