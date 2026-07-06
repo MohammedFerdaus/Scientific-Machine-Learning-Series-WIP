@@ -32,7 +32,7 @@ function forward_trunk(net::TrunkNet, y)
     h1 = relu.(net.W1 * y_vec .+ net.b1)
     h2 = relu.(net.W2 * h1 .+ net.b2)
     h3 = relu.(net.W3 * h2 .+ net.b3)
-    output = relu.(net.W4 * h3 .+ net.b4)
+    output = relu.(net.W4 * h3 .+ net.b4) 
 
     return output
 end
