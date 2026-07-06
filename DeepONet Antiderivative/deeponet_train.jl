@@ -12,7 +12,7 @@ struct BranchNetGradients{T<:Real}
     dW4::Matrix{T}
     db4::Vector{T}
 end
-
+ 
 struct TrunkNetGradients{T<:Real}
     dW1::Matrix{T}
     db1::Vector{T}
