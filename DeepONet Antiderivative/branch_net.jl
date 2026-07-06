@@ -8,7 +8,7 @@ mutable struct BranchNet{T<:Real}
     W4::Matrix{T}
     b4::Vector{T}
 end
-
+ 
 function he_init(fan_out, fan_in)
     std = sqrt(2 / fan_in)
     return std .* randn(fan_out, fan_in)
