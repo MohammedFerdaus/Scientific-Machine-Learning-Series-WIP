@@ -17,7 +17,7 @@ function sample_fourier_coefficients(K, sigma, decay_power)
 
     return FourierFunctionSample(a0, a_coeffs, b_coeffs, K)
 end
-
+ 
 function evaluate_u(sample::FourierFunctionSample, t)
     result = sample.a0 .+ zero(t) 
     
