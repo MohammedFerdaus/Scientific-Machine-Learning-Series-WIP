@@ -116,7 +116,7 @@ Without an autograd library, gradients of the loss with respect to each weight a
 
 $$\frac{\partial \mathcal{L}}{\partial \theta_i} \approx \frac{\mathcal{L}(\theta_i + \epsilon) - \mathcal{L}(\theta_i - \epsilon)}{2\epsilon}, \quad \epsilon = 10^{-5}$$
 
-This requires two full loss evaluations per parameter per epoch — approximately 4400 evaluations for the `[1,32,32,32,1]` network. Correct but slow.
+This requires two full loss evaluations per parameter per epoch — approximately 4400 evaluations for the `[1,32,32,32,1]` network.
 
 ### The Adam Optimizer
 
@@ -176,18 +176,6 @@ All three evaluations go through the tape so gradients flow correctly to all wei
 | RK4 | `6.6e-10` | Near machine precision |
 | PINN finite differences | `~1.6` | 100 epochs, small network |
 | PINN autograd | `~1.07` | 500 epochs |
-
----
-
-## Possible Improvements
-
-**L-BFGS second order optimizer** — Adam stalls near local minima because it has no curvature information. L-BFGS approximates the inverse Hessian from gradient history using a two loop recursion and uses a line search with Wolfe conditions to guarantee progress every step. Standard PINN implementations use Adam to find the right basin then switch to L-BFGS for final convergence — this is what enables loss below `1e-6`.
-
-**Fourier input features** — the network struggles to learn oscillatory behavior from a raw scalar input due to spectral bias. Replacing $t$ with Fourier encodings $[\cos(2\pi f_k t), \sin(2\pi f_k t)]$ for several frequencies $f_k$ directly addresses this and typically yields an order of magnitude accuracy improvement.
-
-**Adaptive collocation** — rather than fixed uniform collocation points, resampling points in regions of high residual focuses training effort where the network is most wrong and speeds convergence.
-
-**Loss gradient balancing** — instead of a fixed $\lambda$, dynamically adjust the IC weight each epoch based on the ratio of physics to IC gradient norms so neither term dominates.
 
 ---
 
