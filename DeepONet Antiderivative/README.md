@@ -49,7 +49,7 @@ Random training functions are generated as truncated Fourier series:
 
 $$u(t) = a_0 + \sum_{k=1}^{K}\left[a_k\cos(2\pi k t) + b_k\sin(2\pi k t)\right]$$
 
-with coefficients drawn as $a_0 \sim \mathcal{N}(0,\sigma^2)$ and $a_k, b_k \sim \mathcal{N}(0, \sigma^2/k^{2p})$, where $p$ is a decay power controlling how quickly higher harmonics are suppressed (see "Hyperparameter Investigation" below). Since integration is linear, the antiderivative is exact and closed-form:
+with coefficients drawn as $a_0 \sim \mathcal{N}(0,\sigma^2)$ and $a_k, b_k \sim \mathcal{N}(0, \sigma^2/k^{2p})$, where $p$ is a decay power controlling how quickly higher harmonics are suppressed. Since integration is linear, the antiderivative is exact and closed-form:
 
 $$G(u)(y) = a_0 y + \sum_{k=1}^{K}\left[\frac{a_k}{2\pi k}\sin(2\pi k y) - \frac{b_k}{2\pi k}\left(\cos(2\pi k y) - 1\right)\right]$$
 
@@ -114,13 +114,6 @@ Standard values $\beta_1 = 0.9$, $\beta_2 = 0.999$, $\epsilon = 10^{-8}$ are use
 
 ---
 
-## Known Bugs Fixed During Development
-
-- `evaluate_antiderivative` in `true_antiderivative.jl` originally used in-place broadcasting assignment (`.+=`, `.-=`) on a variable that could be a plain scalar when `y` was a single query point. Julia scalars are immutable, so this crashed with a `MethodError` on `copyto!` the first time training called the function with a scalar `y`. Fixed by switching to plain reassignment (`result = result .+ (...)`), which works for both scalar and vector inputs.
-- `decay_power` threading through `sample_fourier_coefficients` and `generate_function_batch` was edited in conversation but the edits did not initially land in the actual files, causing `MethodError`s from argument-count mismatches further down the call chain. Resolved by re-confirming every function signature in the chain against the file contents directly.
-
----
-
 ## Hyperparameter Investigation: Fourier Decay Rate and Network Capacity
 
 The original design used variance decaying as $1/k^2$ across harmonics, matching typical practice for generating smooth random functions. Testing against the fixed benchmark set revealed a weakness: single-frequency test sinusoids at $k=3$ and $k=5$ were predicted poorly, losing the oscillation entirely past the first cycle or two, because those harmonics are rare and low-amplitude in a $1/k^2$-decayed training distribution.
@@ -141,20 +134,6 @@ Increasing network capacity (hidden width and $p$ both raised from 128 to 256, d
 - This conclusion is based on single runs per configuration, not averaged across multiple random seeds. Run-to-run noise was substantial — two identical-configuration runs at decay power 1 varied by roughly 50% on several test functions.
 - The larger network required roughly 8x the epochs and a higher learning rate to reach convergence, compared to the smaller network's 500-epoch runs (which themselves had not converged to the loss threshold).
 - Sinusoid $k=5$ and constant $c=1.5$ remain the weakest categories in the final configuration — improved relative to earlier configurations, but not eliminated.
-
----
-
-## Possible Improvements
-
-**Systematic multi-seed sweep** — the decay power and capacity comparisons above are each based on a single run. A proper sweep averaged over several random seeds per configuration would separate genuine architectural effects from run-to-run training noise, which was shown to be substantial.
-
-**Isolating decay power from capacity** — the final configuration changed decay power and network capacity together. A controlled study varying one at a time at the larger network size would clarify how much each change contributed independently.
-
-**Additional test function classes** — a Gaussian bump and a two-frequency sinusoid sum were considered for the fixed test set but deferred. Both would further probe generalization beyond the Fourier training distribution.
-
-**L-BFGS second order optimizer** — as in Project 01, Adam was used throughout; L-BFGS for final-stage convergence was deferred, and is particularly relevant to Ferrum's eventual surrogate and preconditioner training needs.
-
-**Chebyshev sensor placement** — sensors were placed uniformly on $[0,1]$; comparing against Chebyshev-spaced sensors (an explicitly suggested extension in the original project spec) was not investigated.
 
 ---
 
